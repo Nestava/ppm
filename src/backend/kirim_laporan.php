@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $nik = is_array($_SESSION['nik']) ? $_SESSION['nik']['nik'] : $_SESSION['nik'];
 
-    $result = mysqli_query($conn, "INSERT INTO pengaduan(id_pengaduan, tgl_pengaduan, isi_laporan, nik) VALUES('$id', '$waktu', '$laporan', '$nik')");
+    $result = mysqli_query($conn, "INSERT INTO pengaduan(id_pengaduan, tgl_pengaduan, isi_laporan, nik, status) VALUES('$id', '$waktu', '$laporan', '$nik', '0')");
 
     if (!$result) {
         die("Query error: " . mysqli_error($conn));
