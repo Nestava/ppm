@@ -42,40 +42,49 @@ include '../backend/register-be.php';
                 <div class="mb-5 border-t-2 border-[#870000]">
                     <div class="mb-1 mt-5">
                         <label for="nik">NIK</label><br />
-                        <input id="nik" name="nik" class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                        <input id="nik" name="nik"
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
                             placeholder="Masukkan NIK" />
                     </div>
                     <div class="mb-1">
                         <label for="name">Nama Lengkap</label><br />
-                        <input id="name" name="name" class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                        <input id="name" name="name"
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
                             placeholder="Masukkan Nama" />
                     </div>
                     <div class="mb-1">
                         <label for="username">Username</label><br />
-                        <input id="username" name="username" class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                        <input id="username" name="username"
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
                             placeholder="Masukkan Username" />
                     </div>
                     <div class="mb-1">
                         <label for="telepon">Telepon</label><br />
-                        <input id="telepon" name="telepon" class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                        <input id="telepon" name="telepon"
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
                             placeholder="Masukkan No. Telepon" />
                     </div>
                     <div class="mb-1">
                         <label>Password</label><br />
                         <input id="password" name="password" type="password"
-                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1" placeholder="Masukkan Password" />
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                            placeholder="Masukkan Password" />
                     </div>
                     <div class="mb-1">
                         <label>Confirm Password</label><br />
                         <input id="con-password" name="con-password" type="password"
-                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1   " placeholder="Konfirmasi Password" />
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1   "
+                            placeholder="Konfirmasi Password" />
                     </div>
                 </div>
                 <button type="submit" value="Register"
-                    class="w-sm text-sm py-1.5 rounded-lg bg-red-700 text-white mb-4">REGISTER</button>
+                    class="w-sm text-sm py-1.5 rounded-lg bg-red-700 text-white mb-4 cursor-pointer">REGISTER</button>
             </form>
-            <a class="text-blue-400 hover:underline focus:text-blue-600 " href="login-fe.php">
-                Sudah memiliki akun? Login di sini!
+            <a>
+                Sudah memiliki akun?
+                <a class="text-blue-400 hover:underline focus:text-blue-600 " href="login-fe.php">
+                    Login di sini!
+                </a>
             </a>
         </div>
     </div>

@@ -1,13 +1,14 @@
 <?php
 
 include '../connect.php';
+
+date_default_timezone_set("Asia/Jakarta");
+
 include '../backend/kirim_laporan.php';
 
 session_start();
 if ($_SESSION['status'] != "login") {
     header("location:login-fe.php?pesan=belum_login");
-
-    date_default_timezone_set("Asia/Jakarta");
 }
 
 ?>
@@ -25,7 +26,7 @@ if ($_SESSION['status'] != "login") {
 
 <body>
     <?php
-    include '../navbar.php';
+    include './navbar.php';
     ?>
 
     <div class="my-16 mx-30">
@@ -95,7 +96,7 @@ if ($_SESSION['status'] != "login") {
                         type="text" name="laporan" id="laporan" rows="13"></textarea>
                 </div>
                 <div class="mb-6">
-                    <label for="upload">Tambahankan Foto (Jika ada)</label><br>
+                    <label for="upload">Tambahkan Foto (Jika ada)</label><br>
                     <div class="flex items-center border border-gray-300 rounded overflow-hidden w-full mt-2">
                         <label for="upload" class="flex items-center bg-gray-300 px-3 py-2 cursor-pointer">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none"
