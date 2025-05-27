@@ -1,6 +1,7 @@
 <?php
 include '../connect.php';
 include '../backend/login-be.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -49,7 +50,8 @@ include '../backend/login-be.php';
             placeholder="Masukkan Password" />
         </div>
       </div>
-      <button type="submit" value="Login" class="w-sm text-sm py-1.5 rounded-lg bg-red-700 text-white cursor-pointer">LOGIN</button>
+      <button type="submit" value="Login"
+        class="w-sm text-sm py-1.5 rounded-lg bg-red-700 text-white cursor-pointer">LOGIN</button>
     </form>
     <a>Belum memiliki akun?
       <a class="text-blue-400 hover:underline focus:text-blue-600" href="register-fe.php">

@@ -1,6 +1,11 @@
 <?php
 include '../connect.php';
-session_start()
+include './navbar_admin.php';
+
+$id = $_SESSION['id']['id_petugas'];
+
+$cariPetugas = mysqli_query($conn, "SELECT * FROM petugas WHERE id_petugas='$id'");
+$petugasMentah = mysqli_fetch_assoc($cariPetugas)
     ?>
 
 <!DOCTYPE html>
@@ -10,17 +15,17 @@ session_start()
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
-    <link href="../output.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <link href="../output.css" rel="stylesheet" /> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
 
 <body class="">
-    <?php
-    include './navbar_admin.php';
-    ?>
+
     <div class="mx-15 my-8">
         <div>
-            <h1 class="text-3xl font-medium">Selamat Datang, <?php echo $_SESSION['username']; ?>, di Page Petugas</h1>
+            <h1 class="text-3xl font-medium">Selamat Datang, <?= $petugasMentah['username']; ?>, di Page Petugas</h1>
             <h2 class="text-2xl">Selamat Bekerja.</h2>
         </div>
 
@@ -31,54 +36,56 @@ session_start()
                 </h1>
                 <div class="grid grid-cols-2 gap-5">
                     <?php
-                    $data = mysqli_query($conn, "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC");
+                    $data = mysqli_query($conn, "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC LIMIT 0, 12");
                     ?>
 
                     <div class="border border-gray-300 rounded-lg shadow overflow-hidden">
                         <div class="h-[500px] overflow-y-scroll space-y-4 p-4">
-                                <?php foreach ($data as $item): ?>
-                                    <div
-                                        class="border border-gray-400 p-4 rounded-lg shadow-sm h-[150px] flex flex-col justify-between cursor-pointer">
-                                        <div>
-                                            <div class="flex justify-between items-center">
-                                                <?php
-                                                $nama_result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='" . $item['nik'] . "'"));
-                                                $nama = $nama_result['nama'];
-                                                ?>
-                                                <h2 class="font-medium text-xl"><?= $nama ?></h2>
-                                                <span class="text-md text-gray-500"><?= $item['tgl_pengaduan'] ?></span>
-                                            </div>
-                                            <p class="text-md text-gray-700 mt-2 line-clamp-2">
-                                                <?= $item['isi_laporan'] ?>
-                                            </p>
-                                        </div>
-                                        <div class="flex justify-between mt-2 text-md font-medium">
-                                            <a href="laporan-detail.php?id=<?= $item['id_pengaduan'] ?>" class="text-blue-500">Lihat Detail ›</a>
+                            <?php foreach ($data as $item): ?>
+                                <div
+                                    class="border border-gray-400 p-4 rounded-lg shadow-sm h-[150px] flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex justify-between items-center">
                                             <?php
-                                            $status_raw = $item['status'];
-
-                                            switch ($status_raw) {
-                                                case 0:
-                                                    $warna = "yellow";
-                                                    $status = "Belum terverifikasi";
-                                                    break;
-                                                case "proses":
-                                                    $warna = "blue";
-                                                    $status = "Proses";
-                                                    break;
-                                                case "selesai":
-                                                    $warna = "green";
-                                                    $status = "Selesai";
-                                                    break;
-                                            }
+                                            $nama_result = mysqli_fetch_assoc(mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='" . $item['nik'] . "'"));
+                                            $nama = $nama_result['nama'];
                                             ?>
-                                            <div class="flex items-center text-<?= $warna ?>-600">
-                                                <span class="w-3 h-3 bg-<?= $warna ?>-400 rounded-full mr-2"></span>
-                                                <?= $status ?>
-                                            </div>
+                                            <h2 class="font-medium text-xl"><?= $nama ?></h2>
+                                            <span class="text-md text-gray-500"><?= $item['tgl_pengaduan'] ?></span>
+                                        </div>
+                                        <p class="text-md text-gray-700 mt-2 line-clamp-2">
+                                            <?= $item['isi_laporan'] ?>
+                                        </p>
+                                    </div>
+                                    <div class="flex mt-2 text-md font-medium justify-between">
+                                        <a href="laporan-detail.php?id=<?= $item['id_pengaduan'] ?>"
+                                            class="text-blue-500">Lihat Detail ›</a>
+                                        <?php
+                                        $status_raw = $item['status'];
+
+                                        switch ($status_raw) {
+                                            case 0:
+                                                $warna = "yellow";
+                                                $status = "Belum terverifikasi";
+                                                break;
+                                            case "proses":
+                                                $warna = "blue";
+                                                $status = "Proses";
+                                                break;
+                                            case "selesai":
+                                                $warna = "green";
+                                                $status = "Selesai";
+                                                break;
+                                        }
+                                        ?>
+                                        <div class="flex items-center text-<?= $warna ?>-600">
+                                            <span class="w-3 h-3 bg-<?= $warna ?>-400 rounded-full mr-2"></span>
+                                            <?= $status ?>
                                         </div>
                                     </div>
-                                <?php endforeach; ?>
+                                </div>
+                                </a>
+                            <?php endforeach; ?>
                         </div>
                         <div class="border-t px-4 py-3 text-center bg-white">
                             <a href="./laporan.php"
@@ -102,7 +109,7 @@ session_start()
                                     echo $belum;
                                     ?>
                                 </h1>
-                                <a class="">Lihat Detail ›</a>
+                                <a href="laporan.php?kategori=belum-terverifikasi">Lihat Detail ›</a>
                             </div>
                             <div class="bg-blue-400 p-3 rounded-xl grid gap-5">
                                 Proses
@@ -112,7 +119,7 @@ session_start()
                                     echo $proses;
                                     ?>
                                 </h1>
-                                <a class="">Lihat Detail ›</a>
+                                <a href="laporan.php?kategori=proses">Lihat Detail ›</a>
                             </div>
                             <div class="bg-green-500 p-3 rounded-xl grid gap-5">
                                 Selesai
@@ -122,7 +129,7 @@ session_start()
                                     echo $selesai;
                                     ?>
                                 </h1>
-                                <a class="">Lihat Detail ›</a>
+                                <a href="laporan.php?kategori=selesai">Lihat Detail ›</a>
                             </div>
                         </div>
                         <div class="bg-red-500 mt-5 h-5/12 rounded-xl text-white font-medium p-5 grid gap-5">
@@ -139,7 +146,7 @@ session_start()
                                     Laporan
                                 </h3>
                             </div>
-                            <a class="">Lihat Detail ›</a>
+                            <a href="laporan.php" class="">Lihat Detail ›</a>
                         </div>
                     </div>
                 </div>
@@ -165,7 +172,8 @@ session_start()
                                         </div>
                                     </div>
                                     <div class="flex justify-between items-center mt-2 text-md font-medium">
-                                        <a href="#" class="text-blue-500">Lihat Detail ›</a>
+                                        <a href="anggota-detail.php?id=<?= $arr_anggota['id_petugas'] ?>"
+                                            class="text-blue-500">Lihat Detail ›</a>
                                         <?php
                                         switch ($arr_anggota['level']) {
                                             case "admin":
@@ -186,14 +194,16 @@ session_start()
                             <?php endforeach; ?>
                         </div>
                         <div class="border-t px-4 py-3 text-center bg-white">
-                            <button
-                                class="text-blue-500 font-semibold text-sm hover:underline flex items-center justify-center mx-auto">
-                                Lihat Lebih Banyak
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
-                                </svg>
-                            </button>
+                            <a href="./anggota.php">
+                                <button
+                                    class="text-blue-500 font-semibold text-sm hover:underline flex items-center justify-center mx-auto">
+                                    Lihat Lebih Banyak
+                                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+                            </a>
                         </div>
                     </div>
                     <div class="rounded-lg shadow overflow-hidden bg-red-700 p-5">
@@ -207,7 +217,7 @@ session_start()
                                     echo $admin;
                                     ?>
                                 </h1>
-                                <a class="">Lihat Detail ›</a>
+                                <a href="anggota.php?level=admin" class="">Lihat Detail ›</a>
                             </div>
                             <div class="bg-green-500 p-3 rounded-xl grid gap-5">
                                 Petugas
@@ -217,7 +227,7 @@ session_start()
                                     echo $petugas;
                                     ?>
                                 </h1>
-                                <a class="">Lihat Detail ›</a>
+                                <a href="anggota.php?level=petugas" class="">Lihat Detail ›</a>
                             </div>
                         </div>
                         <div class="bg-red-500 mt-5 h-5/12 rounded-xl text-white font-medium p-5 grid gap-5">
@@ -235,13 +245,16 @@ session_start()
                                     Anggota
                                 </h3>
                             </div>
-                            <a class="">Lihat Detail ›</a>
+                            <a href="anggota.php" class="">Lihat Detail ›</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <?php
+    include './footer.php';
+    ?>
 </body>
 
 </html>

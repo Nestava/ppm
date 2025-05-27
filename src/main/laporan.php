@@ -1,16 +1,41 @@
 <?php
 include '../connect.php';
+include './navbar_admin.php';
+
 
 $limit = 12;
 
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $start = ($page - 1) * $limit;
 
-$total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengaduan");
-$total_data = mysqli_fetch_assoc($total_data_result)['total'];
-$total_pages = ceil($total_data / $limit);
+if (isset($_GET['kategori'])) {
+    $kategori = $_GET['kategori'];
 
-$data = mysqli_query($conn, "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC LIMIT $start, $limit");
+    if ($kategori == "belum-terverifikasi") {
+        $total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengaduan WHERE status='0'");
+        $data = mysqli_query($conn, "SELECT * FROM pengaduan WHERE status='0' ORDER BY id_pengaduan DESC LIMIT $start, $limit");
+    } else if ($kategori == "proses") {
+        $total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengaduan WHERE status='proses'");
+        $data = mysqli_query($conn, "SELECT * FROM pengaduan WHERE status='proses' ORDER BY id_pengaduan DESC LIMIT $start, $limit");
+    } else if ($kategori == "selesai") {
+        $total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengaduan WHERE status='selesai'");
+        $data = mysqli_query($conn, "SELECT * FROM pengaduan WHERE status='selesai' ORDER BY id_pengaduan DESC LIMIT $start, $limit");
+    }
+
+    $total_data = mysqli_fetch_assoc($total_data_result)['total'];
+    $jumlahData = mysqli_num_rows($data);
+    $total_pages = ceil($total_data / $limit);
+
+} else {
+    $total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengaduan");
+    $data = mysqli_query($conn, "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC LIMIT $start, $limit");
+    $total_data = mysqli_fetch_assoc($total_data_result)['total'];
+    $jumlahData = mysqli_num_rows($data);
+    $total_pages = ceil($total_data / $limit);
+}
+;
+
+
 
 ?>
 
@@ -19,31 +44,64 @@ $data = mysqli_query($conn, "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC 
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Laporan</title>
 </head>
 
 <body>
-    <?php
-    include './navbar_admin.php';
-    ?>
 
     <h1 class="text-3xl text-center font-medium mt-5">Laporan</h1>
-    <div class="flex justify-center items-center space-x-1 my-6">
-        <a href="?page=<?= max(1, $page - 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
-            &lt;
-        </a>
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <a href="?page=<?= $i ?>"
-                class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800' ?>">
-                <?= $i ?>
-            </a>
-        <?php endfor; ?>
-        <a href="?page=<?= min($total_pages, $page + 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
-            &gt;
-        </a>
+    <div class="flex justify-center gap-3 my-5">
+        <a href="laporan.php" class="border-2 border-red-500 px-3 py-1 rounded-md text-red-500 font-medium">Semua</a>
+        <a class="border-2 px-3 py-1 rounded-md border-yellow-500 text-yellow-500 font-medium" href="?kategori=belum-terverifikasi">Belum
+            Terverifikasi</a>
+        <a href="?kategori=proses" class="border-2 border-blue-500 px-3 py-1 rounded-md text-blue-500 font-medium">Proses</a>
+        <a href="?kategori=selesai" class="border-2 border-green-500 px-3 py-1 rounded-md text-green-500 font-medium">Selesai</a>
     </div>
+
+    <div class="flex justify-center items-center space-x-1 my-6">
+        <?php if ($total_data > 0 && $total_pages > 1): ?>
+            <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= max(1, $page - 1) ?>"
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                &lt;
+            </a>
+
+            <?php
+            $range = 2; // jumlah halaman sebelum dan sesudah halaman aktif
+            $start = max(1, $page - $range);
+            $end = min($total_pages, $page + $range);
+
+            if ($start > 1) {
+                echo '<a href="?' . (isset($kategori) ? "kategori=$kategori&" : "") . 'page=1" class="px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">1</a>';
+                if ($start > 2)
+                    echo '<span class="px-2 text-gray-500">...</span>';
+            }
+
+            for ($i = $start; $i <= $end; $i++):
+                ?>
+                <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= $i ?>"
+                    class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300' ?>">
+                    <?= $i ?>
+                </a>
+            <?php endfor;
+
+            if ($end < $total_pages) {
+                if ($end < $total_pages - 1)
+                    echo '<span class="px-2 text-gray-500">...</span>';
+                echo '<a href="?' . (isset($kategori) ? "kategori=$kategori&" : "") . 'page=' . $total_pages . '" class="px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">' . $total_pages . '</a>';
+            }
+            ?>
+
+            <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                &gt;
+            </a>
+        <?php elseif ($total_data < 1): ?>
+            <h1 class="text-gray-500">Belum ada laporan yang bisa diperiksa.</h1>
+        <?php endif; ?>
+    </div>
+
 
     <div class="grid grid-cols-3 gap-3 m-5">
 
@@ -92,19 +150,26 @@ $data = mysqli_query($conn, "SELECT * FROM pengaduan ORDER BY id_pengaduan DESC 
     </div>
 
     <div class="flex justify-center items-center space-x-1 my-6">
-        <a href="?page=<?= max(1, $page - 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
-            &lt;
-        </a>
-        <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-            <a href="?page=<?= $i ?>"
-                class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800' ?>">
-                <?= $i ?>
-            </a>
-        <?php endfor; ?>
-        <a href="?page=<?= min($total_pages, $page + 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
-            &gt;
-        </a>
+        <?php if ($total_data > 0): ?>
+            <?php if ($total_pages > 1): ?>
+                <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= max(1, $page - 1) ?>"
+                    class="px-2 py-1 border rounded hover:bg-gray-200">&lt;</a>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= $i ?>"
+                        class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+
+                <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
+                    class="px-2 py-1 border rounded hover:bg-gray-200">&gt;</a>
+            <?php endif; ?>
+        <?php endif; ?>
+        <?php if ($total_data < 1): ?>
+        <?php endif; ?>
     </div>
+
 </body>
 
 </html>

@@ -1,3 +1,9 @@
+<?php
+
+include '../backend/auth.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,14 +11,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="output.css" rel="stylesheet" />
-    <title>navbar</title>
 </head>
 
 <body>
     <nav class="bg-[#BA0000] px-20 py-4 flex items-center">
         <a class="text-white text-4xl font-bold cursor-pointer" href="./petugas.php">PPM</a>
         <div class="ml-auto">
-            <a class="text-white mr-10 font-medium" href="./profil.php">Profil</a>
+            <a class="text-white mr-10 font-medium" href="./profil-admin.php">Profil</a>
             <a class="text-white mr-10 font-medium" href="./petugas.php">Petugas</a>
             <a class="text-white mr-10 font-medium" href="./laporan.php">Laporan</a>
             <a class="text-white mr-10 font-medium" href="./anggota.php">Anggota</a>

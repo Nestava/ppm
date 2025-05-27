@@ -2,14 +2,16 @@
 
 include '../connect.php';
 
+include './navbar.php';
+
+$nik = $_SESSION['nik'];
+
+$cariMasyarakat = mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='" . $_SESSION['nik']['nik'] . "'");
+$masyarakatMentah = mysqli_fetch_assoc($cariMasyarakat);
+
 date_default_timezone_set("Asia/Jakarta");
 
 include '../backend/kirim_laporan.php';
-
-session_start();
-if ($_SESSION['status'] != "login") {
-    header("location:login-fe.php?pesan=belum_login");
-}
 
 ?>
 
@@ -21,17 +23,15 @@ if ($_SESSION['status'] != "login") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="../output.css" rel="stylesheet" />
     <title>Masyarakat</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-    <?php
-    include './navbar.php';
-    ?>
 
     <div class="my-16 mx-30">
         <div class="text-3xl font-medium text-center">
-            <p>Selamat datang, <?php echo $_SESSION['username'] ?>, di</p>
+            <p>Selamat datang, <?= $masyarakatMentah['username'] ?>, di</p>
             <p>Layanan Pengaduan Pelaporan Masyarakat Online</p>
         </div>
         <p class="text-2xl font-light text-center mt-2">Sampaikan Pengaduan Anda Secara Cepat dan Tepat</p>
@@ -109,7 +109,7 @@ if ($_SESSION['status'] != "login") {
                             class="file:hidden bg-gray-50 w-full text-sm text-gray-500 px-4 py-2 cursor-pointer">
                     </div>
                 </div>
-                <button type="submit" name="submit"
+                <button type="submit" name="sumbit"
                     class="bg-red-600 w-full py-2 text-white font-medium rounded cursor-pointer">Submit</button>
             </div>
         </form>
@@ -210,6 +210,9 @@ if ($_SESSION['status'] != "login") {
         </div>
 
     </div>
+    <?php
+    include './footer.php';
+    ?>
 </body>
 
 </html>
