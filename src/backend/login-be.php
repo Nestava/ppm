@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mysqli_num_rows($queryMasyarakat) > 0) {
         $nik_find = mysqli_query($conn, "SELECT nik FROM masyarakat WHERE username='$username'");
         $nik = mysqli_fetch_assoc($nik_find);
-        $_SESSION['nik'] = $nik;
+        $_SESSION['nik'] = $nik['nik'];
         $_SESSION['status'] = "login";
         header("location:../main/masyarakat.php");
         exit;

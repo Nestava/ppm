@@ -178,3 +178,8 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
 </body>
 
 </html>
+
+
+<?php 
+include './footer.php';
+?>

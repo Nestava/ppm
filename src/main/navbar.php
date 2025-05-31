@@ -14,10 +14,14 @@ include '../backend/auth.php';
     <nav class="bg-[#BA0000] px-20 py-4 flex items-center">
         <h1 class="text-white text-4xl font-bold">PPM</h1>
         <div class="ml-auto">
+            <a class="text-white mr-10 font-medium" href="aboutaspage.php">About</a>
             <a class="text-white mr-10 font-medium" href="profil-masyarakat.php">Profil</a>
             <a class="text-white mr-10 font-medium" href="masyarakat.php">Lapor</a>
             <a class="text-white bg-[#570000] px-4 py-2 rounded-3xl font-medium" href="../backend/logout.php">Logout</a>
         </div>
     </nav>
 </body>
+
+
 </html>
+

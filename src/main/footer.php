@@ -11,9 +11,11 @@
 
 <body class="">
     <footer class="w-full static bottom-0 bg-red-700 text-white mt-28 py-6 justify-center items-center text-center text-sm flex gap-8">
-        <p>Lapor</p>
+        <?php if (isset($_SESSION['nik'])) :?>
+        <a href="laporan.php">Lapor</a>
+        <?php endif; ?>
         <p class="font-bold text-xl">PPM</p>
-        <p>About Us</p>
+        <a href="aboutaspage.php">About Us</a>
     </footer>
 </body>
 

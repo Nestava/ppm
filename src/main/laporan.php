@@ -173,3 +173,7 @@ if (isset($_GET['kategori'])) {
 </body>
 
 </html>
+
+<?php 
+include './footer.php';
+?>

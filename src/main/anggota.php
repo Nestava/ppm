@@ -183,3 +183,7 @@ if (isset($_GET['level'])) {
 </body>
 
 </html>
+
+<?php 
+include './footer.php';
+?>

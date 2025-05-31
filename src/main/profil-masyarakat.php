@@ -3,7 +3,7 @@
 include '../connect.php';
 include './navbar.php';
 
-$nik = $_SESSION['nik']['nik'];
+$id = $_SESSION['nik'];
 
 //
 
@@ -12,13 +12,13 @@ $limit = 12;
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $start = ($page - 1) * $limit;
 
-$total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM pengaduan WHERE nik='$nik'");
+$total_data_result = mysqli_query($conn, "SELECT COUNT(*) AS total FROM masyarakat WHERE nik='$id'");
 $total_data = mysqli_fetch_assoc($total_data_result)['total'];
 $total_pages = ceil($total_data / $limit);
 
 //
 
-$cariData = mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='$nik'");
+$cariData = mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='$id'");
 $data = mysqli_fetch_assoc($cariData);
 
 $nik = $data['nik'];
@@ -28,33 +28,55 @@ $telp = $data['telp'];
 $password = $data['password'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
     if (isset($_POST['submit_nama'])) {
         $newUsername = $_POST['username'];
-        mysqli_query($conn, "UPDATE masyarakat SET username='$newUsername' WHERE nik='$nik'");
+        if (empty($newUsername)) {
+            header("location:profil-masyarakat.php?error=data_kosong");
+            exit;
+        }
+        $validasi = mysqli_query($conn, "SELECT * FROM petugas WHERE username='$newUsername'");
+        $validasi2 = mysqli_query($conn, "SELECT * FROM masyarakat WHERE username='$newUsername'");
+
+        if (mysqli_num_rows($validasi) > 0 || mysqli_num_rows($validasi2) > 0) {
+            header("location:profil-masyrakat.php?username=terpakai");
+            exit;
+        }
+        mysqli_query($conn, "UPDATE masyarakat SET username='$newUsername' WHERE nik='$id'");
         header("location:profil-masyarakat.php");
         exit;
     }
     if (isset($_POST['submit_telp'])) {
         $newTelepon = $_POST['telepon'];
-        mysqli_query($conn, "UPDATE masyarakat SET telp='$newTelepon' WHERE nik='$nik'");
+        if (empty($newTelepon)) {
+            header("location:profil-masyarakat.php?error=data_kosong");
+            exit;
+        }
+        mysqli_query($conn, "UPDATE masyarakat SET telp='$newTelepon' WHERE nik='$id'");
         header("location:profil-masyarakat.php");
         exit;
     }
     if (isset($_POST['submit_pass'])) {
+        if (empty($_POST['password']) || empty($_POST['konfirm_password'])) {
+            header("location:profil-masyarakat.php?error=data_kosong");
+            exit;
+        }
         $newPassword = md5($_POST['password']);
         $conPassword = md5($_POST['konfirm_password']);
         if ($newPassword == $conPassword) {
-            mysqli_query($conn, "UPDATE masyarakat SET password='$newPassword' WHERE nik='$nik'");
+            mysqli_query($conn, "UPDATE petugas SET password='$newPassword' WHERE nik='$id'");
             header("location:profil-masyarakat.php");
             exit;
         } else if ($newPassword != $conPassword) {
-            header("location:profil-masyarakat.php?pesan=gagal");
+            header("location:profil-masyarakat.php?password=beda");
             exit;
         }
     }
 }
 
-$cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' ORDER BY id_pengaduan DESC LIMIT $start, $limit; ");
+
+
+$cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$id' ORDER BY id_pengaduan DESC LIMIT $start, $limit; ");
 
 ?>
 
@@ -65,8 +87,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <style>
         input.no-spinner::-webkit-inner-spin-button,
@@ -88,7 +109,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
 
             <div class="grid grid-cols-2 gap-y-2 text-md text-gray-700">
                 <p class="font-medium">ID</p>
-                <p>: <?= $nik ?> </p>
+                <p>: <?= $id ?> </p>
                 <p class="font-medium">Nama</p>
                 <p>: <?= $nama ?></p>
                 <p class="font-medium">Username</p>
@@ -98,6 +119,17 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
             </div>
 
             <div class="mt-10">
+                <?php
+                if (isset($_GET['error'])) {
+                    echo "<h1 class='text-center text-red-500'>Data tidak boleh kosong.</h1>";
+                }
+                if (isset($_GET['username'])) {
+                    echo "<h1 class='text-center text-red-500'>Username sudah terpakai.</h1>";
+                }
+                if (isset($_GET['password'])) {
+                    echo "<h1 class='text-center text-red-500'>Konfirmasi password berbeda.</h1>";
+                }
+                ?>
                 <h1 class="text-2xl font-medium text-center mb-2">Ubah Username</h1>
                 <form method="post">
                     <label for="username" class="block font-medium mb-2">Ubah Username</label>
@@ -142,28 +174,33 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
         </div>
     </main>
     <main>
-        <h1 class="text-3xl font-medium text-center mb-8">History Aduan</h1>
+        <h1 class="text-3xl font-medium text-center mb-8">History Laporan</h1>
 
-        <div class="flex justify-center items-center space-x-1 my-6">
-            <a href="?page=<?= max(1, $page - 1) ?>"
-                class="px-2 py-1 border rounded hover:bg-gray-200">
-                &lt;
-            </a>
-            <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                <a href="?page=<?= $i ?>"
-                    class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800' ?>">
-                    <?= $i ?>
+        <?php if ($total_data > $limit): ?>
+            <div class="flex justify-center items-center space-x-1 my-6">
+                <a href="?page=<?= max(1, $page - 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
+                    &lt;
                 </a>
-            <?php endfor; ?>
-            <a href="?page=<?= min($total_pages, $page + 1) ?>"
-                class="px-2 py-1 border rounded hover:bg-gray-200">
-                &gt;
-            </a>
-        </div>
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                    <a href="?page=<?= $i ?>"
+                        class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+                <a href="?page=<?= min($total_pages, $page + 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
+                    &gt;
+                </a>
+            </div>
+        <?php endif;
+
+        if ($total_data == 0) {
+            echo "<h1 class='text-center mb-10'>Belum ada data.</h1>";
+        }
+        ?>
 
         <?php foreach ($cariTanggapan as $data): ?>
             <div class="border border-gray-300 bg-white py-5 px-3 rounded-md mb-2 mx-21">
-                <h1 class="font-medium">ID Pengaduan: <?= $data['id_pengaduan']; ?></h1>
+                <h1 class="font-medium">ID Tanggapan: <?= $data['id_pengaduan']; ?></h1>
                 <p class="my-3 line-clamp-4"><?= $data['isi_laporan']; ?></p>
                 <a href="detail-laporan.php?id=<?= $data['id_pengaduan']; ?>" class="flex justify-end text-blue-500">Lihat
                     Detail ›</a>
@@ -171,8 +208,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
         <?php endforeach; ?>
 
         <div class="flex justify-center items-center space-x-1 my-6">
-            <a href="?page=<?= max(1, $page - 1) ?>"
-                class="px-2 py-1 border rounded hover:bg-gray-200">
+            <a href="?page=<?= max(1, $page - 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
                 &lt;
             </a>
             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
@@ -181,8 +217,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
                     <?= $i ?>
                 </a>
             <?php endfor; ?>
-            <a href="?page=<?= min($total_pages, $page + 1) ?>"
-                class="px-2 py-1 border rounded hover:bg-gray-200">
+            <a href="?page=<?= min($total_pages, $page + 1) ?>" class="px-2 py-1 border rounded hover:bg-gray-200">
                 &gt;
             </a>
         </div>
@@ -192,3 +227,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM pengaduan WHERE nik='$nik' O
 </body>
 
 </html>
+
+<?php 
+include './footer.php';
+?>

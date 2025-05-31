@@ -142,7 +142,10 @@ function hilangkanPopup() {
             </div>
             <div class="mb-5">
                 <h2 class="font-medium">Foto</h2>
+                <?php if (empty($pengaduanMentah['foto'])) : ?>
                 <h2 class="ml-3 ">Pelapor tidak menambahkan foto.</h2>
+                <?php endif; ?>
+                <img src="../assets/img/<?= $pengaduanMentah['foto']; ?>" alt="">
             </div>
             <div class="flex justify-between">
                 <?php

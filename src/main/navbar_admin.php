@@ -2,6 +2,10 @@
 
 include '../backend/auth.php';
 
+if (!isset($_SESSION['id'])) {
+    header("location:masyarakat.php");
+}
+
 ?>
 
 <!DOCTYPE html>

@@ -1,19 +1,20 @@
 <?php
-
 include '../connect.php';
-
 include './navbar.php';
 
 $nik = $_SESSION['nik'];
 
-$cariMasyarakat = mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='" . $_SESSION['nik']['nik'] . "'");
+$cariMasyarakat = mysqli_query($conn, "SELECT * FROM masyarakat WHERE nik='" . $_SESSION['nik'] . "'");
 $masyarakatMentah = mysqli_fetch_assoc($cariMasyarakat);
 
 date_default_timezone_set("Asia/Jakarta");
 
-include '../backend/kirim_laporan.php';
-
+// Panggil kirim_laporan hanya jika form disubmit
+if (isset($_POST['submit'])) {
+    include '../backend/kirim_laporan.php';
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,13 +85,23 @@ include '../backend/kirim_laporan.php';
             </div>
         </div>
 
-        <form class="w-full max-w-4xl mx-auto mt-10 mb-10" method="post">
+        <form class="w-full max-w-4xl mx-auto mt-10 mb-10" method="post" enctype="multipart/form-data">
             <div class="border border-gray-300 py-4 px-7 rounded-md gap-2">
                 <h1 class="text-3xl text-center font-medium">
                     Laporan Pengaduan
                 </h1>
                 <div class="mt-2 mb-5">
                     <label for="laporan">Isi Pengaduan</label><br>
+                    <?php 
+                    if (isset($_GET['pesan'])) {
+                        if ($_GET['pesan'] == "laporan_tidak_valid") {
+                            echo "<h1 class='text-center text-red-500'>Laporan terlalu pendek</h1>";
+                        }
+                        if ($_GET['pesan'] == "laporan_kosong") {
+                            echo "<h1 class='text-center text-red-500'>Laporan tidak boleh kosong</h1>";
+                        }
+                    }
+                    ?>
                     <textarea
                         class="resize-none border border-gray-300 rounded-md mt-2 w-full bg-gray-50 p-3 focus:outline-1"
                         type="text" name="laporan" id="laporan" rows="13"></textarea>
@@ -105,11 +116,11 @@ include '../backend/kirim_laporan.php';
                                     d="M3 7h2l1.5-2h11l1.5 2h2a2 2 0 012 2v9a2 2 0 01-2 2H3a2 2 0 01-2-2V9a2 2 0 012-2zm9 1a4 4 0 100 8 4 4 0 000-8z" />
                             </svg>
                         </label>
-                        <input type="file" id="upload"
+                        <input type="file" id="upload" name="foto"
                             class="file:hidden bg-gray-50 w-full text-sm text-gray-500 px-4 py-2 cursor-pointer">
                     </div>
                 </div>
-                <button type="submit" name="sumbit"
+                <button type="submit" name="submit"
                     class="bg-red-600 w-full py-2 text-white font-medium rounded cursor-pointer">Submit</button>
             </div>
         </form>
