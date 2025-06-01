@@ -28,13 +28,13 @@ $namaPetugas = $petugasMentah['nama_petugas'];
 ?>
 
 <script>
-function hilangkanPopup() {
-    document.getElementById("popup").style.display = "none";
-}
+    function hilangkanPopup() {
+        document.getElementById("popup").style.display = "none";
+    }
 </script>
 
 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
-    <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div id="popup" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-white px-5 py-5 rounded-xl">
             <?php if (isset($_POST['invalid'])): ?>
                 <h1 class="">Invalid berarti menghapus laporan ini. Apakah anda yakin?</h1>
@@ -42,7 +42,9 @@ function hilangkanPopup() {
                     <form method="post">
                         <button class="border-2 border-red-600 text-red-600 font-medium py-1 px-5 rounded-md cursor-pointer"
                             name="ya_hapus">Ya</button>
-                        <button type="button" class="border-2 border-green-600 text-green-600 font-medium py-1 px-3 rounded-md cursor-pointer" onclick="hilangkanPopup()">Tidak</button>
+                        <button type="button"
+                            class="border-2 border-green-600 text-green-600 font-medium py-1 px-3 rounded-md cursor-pointer"
+                            onclick="hilangkanPopup()">Tidak</button>
                     </form>
                 </div>
             <?php endif; ?>
@@ -52,7 +54,9 @@ function hilangkanPopup() {
                     <form method="post">
                         <button class="border-2 border-green-600 text-green-600 font-medium py-1 px-5 rounded-md cursor-pointer"
                             name="ya_proses">Ya</button>
-                        <button type="button" class="border-2 border-red-600 text-red-600 font-medium py-1 px-3 rounded-md cursor-pointer" onclick="hilangkanPopup()">Tidak</button>
+                        <button type="button"
+                            class="border-2 border-red-600 text-red-600 font-medium py-1 px-3 rounded-md cursor-pointer"
+                            onclick="hilangkanPopup()">Tidak</button>
                     </form>
                 </div>
             <?php endif; ?>
@@ -63,7 +67,9 @@ function hilangkanPopup() {
                         <input type="hidden" name="tanggapan" value="<?= htmlspecialchars($_POST['tanggapan']) ?>">
                         <button class="border-2 border-green-600 text-green-600 font-medium py-1 px-5 rounded-md cursor-pointer"
                             name="ya_selesai">Ya</button>
-                        <button type="button" class="border-2 border-red-600 text-red-600 font-medium py-1 px-3 rounded-md cursor-pointer" onclick="hilangkanPopup()">Tidak</button>
+                        <button type="button"
+                            class="border-2 border-red-600 text-red-600 font-medium py-1 px-3 rounded-md cursor-pointer"
+                            onclick="hilangkanPopup()">Tidak</button>
                     </form>
                 </div>
             <?php endif; ?>
@@ -73,13 +79,16 @@ function hilangkanPopup() {
 
 <?php
 
-    if (isset($_POST['ya_proses'])) {
-        mysqli_query($conn, "UPDATE pengaduan SET status='proses' WHERE id_pengaduan='" . $pengaduanMentah['id_pengaduan'] . "'");
+if (isset($_POST['ya_proses'])) {
+    mysqli_query($conn, "UPDATE pengaduan SET status='proses' WHERE id_pengaduan='" . $pengaduanMentah['id_pengaduan'] . "'");
 
-        header("location:laporan-detail.php?id=" . $_GET['id']);
-    }
+    header("location:laporan-detail.php?id=" . $_GET['id']);
+}
 
-    if (isset($_POST['ya_selesai'])) {
+if (isset($_POST['ya_selesai'])) {
+
+    if (!empty($_POST['tanggapan'])) {
+
         $tanggapan = $_POST['tanggapan'];
 
         date_default_timezone_set("Asia/Jakarta");
@@ -90,13 +99,18 @@ function hilangkanPopup() {
         mysqli_query($conn, "UPDATE pengaduan SET status='selesai' WHERE id_pengaduan='" . $pengaduanMentah['id_pengaduan'] . "'");
 
         header("location:laporan-detail.php?id=" . $_GET['id']);
+        exit;
+    } else {
+        header("location:laporan-detail.php?id=" . $_GET['id'] . "&error=tanggapan_kosong");
+        exit;
     }
+}
 
-    if (isset($_POST['ya_hapus'])) {
-        mysqli_query($conn, "DELETE FROM pengaduan WHERE id_pengaduan='" . $pengaduanMentah['id_pengaduan'] . "'");
+if (isset($_POST['ya_hapus'])) {
+    mysqli_query($conn, "DELETE FROM pengaduan WHERE id_pengaduan='" . $pengaduanMentah['id_pengaduan'] . "'");
 
-        header("location:laporan.php");
-    }
+    header("location:laporan.php");
+}
 
 ?>
 
@@ -108,7 +122,7 @@ function hilangkanPopup() {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detail Laporan</title>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 </head>
 
 <div class="m-8">
@@ -122,7 +136,7 @@ function hilangkanPopup() {
                     <h2 class="font-medium">Tanggal Pelaporan</h2>
                     <h2 class="ml-3"><?= $pengaduanMentah['tgl_pengaduan']; ?></h2>
                 </div>
-                <div>
+                <div class="">
                     <h2 class="font-medium">ID Pengaduan</h2>
                     <h2 class="ml-3"><?= $pengaduanMentah['id_pengaduan'] ?></h2>
                 </div>
@@ -138,14 +152,16 @@ function hilangkanPopup() {
             </div>
             <div class="mb-5">
                 <h2 class="font-medium">Isi Pengaduan</h2>
-                <p class="ml-3 w-153"><?= $pengaduanMentah['isi_laporan'] ?></p>
+                <p class="ml-3 w-153"><?= nl2br($pengaduanMentah['isi_laporan']) ?></p>
             </div>
             <div class="mb-5">
                 <h2 class="font-medium">Foto</h2>
-                <?php if (empty($pengaduanMentah['foto'])) : ?>
-                <h2 class="ml-3 ">Pelapor tidak menambahkan foto.</h2>
+                <?php if ($pengaduanMentah['foto'] === "default.jpg" || $pengaduanMentah['foto'] === null): ?>
+                    <h2 class="ml-3">Pelapor tidak menambahkan foto.</h2>
+                <?php else: ?>
+                    <img width="625px" src="../assets/img/<?= htmlspecialchars($pengaduanMentah['foto']); ?>"
+                        alt="Foto Pengaduan">
                 <?php endif; ?>
-                <img src="../assets/img/<?= $pengaduanMentah['foto']; ?>" alt="">
             </div>
             <div class="flex justify-between">
                 <?php
@@ -186,6 +202,13 @@ function hilangkanPopup() {
             </div>
             <div class="mt-5">
                 <h2 class="font-medium">Tanggapan</h2>
+                <?php
+                if (isset($_GET['error'])) {
+                    if ($_GET['error'] == "tanggapan_kosong") {
+                        echo "<h1 class='text-red-500 text-center'>Tanggapan tidak boleh kosong.</h1>";
+                    }
+                }
+                ?>
                 <textarea class="resize-none border border-gray-300 rounded-md mt-2 w-full bg-gray-50 p-3 focus:outline-1"
                     type="text" name="tanggapan" id="tanggapan" rows="9" placeholder="Ketik tanggapan di sini"></textarea>
             </div>
@@ -223,15 +246,19 @@ function hilangkanPopup() {
         </div>
         <div class="mb-5">
             <h2 class="font-medium">Tanggapan</h2>
-            <p class="ml-3 w-153"><?= $tanggapanDB; ?></p>
+            <p class="ml-3 w-153"><?= nl2br($tanggapanDB); ?></p>
         </div>
-        <div class="">
+        <div class="mb-5">
             <h2 class="font-medium">Ditanggapi Oleh</h2>
             <p class="ml-3"><?= $dataPetugasMentah['nama_petugas']; ?></p>
         </div>
+        <div class="">
+            <h2 class="font-medium">Selesai Pada Tanggal</h2>
+            <p class="ml-3"><?= $tanggapanDBMentah['tgl_tanggapan']; ?></p>
+        </div>
         <div class="flex justify-between mt-5">
             <div class="flex items-center text-<?= $warna ?>-600">
-                <span class="w-3 h-3 bg-<?= $warna ?>-400 rounded-full mr-2"></span>
+                <span class="w-3 h-3 bg-<?= $warna ?>-600 rounded-full mr-2"></span>
                 <?= $status ?>
             </div>
             <div class="flex gap-2">

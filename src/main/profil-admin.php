@@ -38,11 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $validasi = mysqli_query($conn, "SELECT * FROM petugas WHERE username='$newUsername'");
         $validasi2 = mysqli_query($conn, "SELECT * FROM masyarakat WHERE username='$newUsername'");
-        
+
         if (mysqli_num_rows($validasi) > 0 || mysqli_num_rows($validasi2) > 0) {
-            header("location:profil-admin.php?username=terpakai");
+            header("location:profil-admin.php?error=username_terpakai");
             exit;
         }
+
         mysqli_query($conn, "UPDATE petugas SET username='$newUsername' WHERE id_petugas='$id'");
         header("location:profil-admin.php");
         exit;
@@ -53,8 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("location:profil-admin.php?error=data_kosong");
             exit;
         }
+
         mysqli_query($conn, "UPDATE petugas SET telp='$newTelepon' WHERE id_petugas='$id'");
-        header("location:profil-admin.php");
+        header("location:profil-admin.php?perubahan_berhasil");
         exit;
     }
     if (isset($_POST['submit_pass'])) {
@@ -62,14 +64,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("location:profil-admin.php?error=data_kosong");
             exit;
         }
+
+        if (strlen($_POST['password']) < 8 || strlen($_POST['konfirm_password']) < 8) {
+            header("location:profil-admin.php?error=kurang_karakter");
+        }
+
         $newPassword = md5($_POST['password']);
         $conPassword = md5($_POST['konfirm_password']);
-        if ($newPassword == $conPassword) {
-            mysqli_query($conn, "UPDATE petugas SET password='$newPassword' WHERE id_petugas='$id'");
-            header("location:profil-admin.php");
+        if (strlen($_POST['password']) < 8) {
+            header("location:profil-admin.php?error=kurang_karakter");
             exit;
         } else if ($newPassword != $conPassword) {
-            header("location:profil-admin.php?password=beda");
+            header("location:profil-admin.php?error=konfirm_password");
+            exit;
+        } else if ($newPassword == $conPassword) {
+            mysqli_query($conn, "UPDATE petugas SET password='$newPassword' WHERE id_petugas='$id'");
+            header("location:profil-admin.php");
             exit;
         }
     }
@@ -88,7 +98,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
 
     <style>
         input.no-spinner::-webkit-inner-spin-button,
@@ -124,13 +134,17 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
             <div class="mt-10">
                 <?php
                 if (isset($_GET['error'])) {
-                    echo "<h1 class='text-center text-red-500'>Data tidak boleh kosong.</h1>";
-                }
-                if (isset($_GET['username'])) {
-                    echo "<h1 class='text-center text-red-500'>Username sudah terpakai.</h1>";
-                }
-                if (isset($_GET['password'])) {
-                    echo "<h1 class='text-center text-red-500'>Konfirmasi password berbeda.</h1>";
+                    if ($_GET['error'] == "kurang_karakter") {
+                        echo "<h1 class='text-center text-red-500'>Password butuh minimal 8 karakter.</h1>";
+                    } else if ($_GET['error'] == "data_kosong") {
+                        echo "<h1 class='text-center text-red-500'>Data tidak boleh kosong.</h1>";
+                    } else if ($_GET['error'] == "username_terpakai") {
+                        echo "<h1 class='text-center text-red-500'>Username terpakai.</h1>";
+                    } else if ($_GET['error'] == "konfirm_password") {
+                        echo "<h1 class='text-center text-red-500'>Periksa kembali konfirmasi password.</h1>";
+                    } 
+                } else if (isset($_GET['perubahan_berhasil'])) {
+                        echo "<h1 class='text-center text-green-500'>Perubahan Berhasil!</h1>";
                 }
                 ?>
                 <h1 class="text-2xl font-medium text-center mb-2">Ubah Username</h1>
@@ -140,7 +154,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
                         placeholder="Masukkan username baru">
                     <div class="mt-6 text-right">
                         <button type="submit" name="submit_nama"
-                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit
+                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer">Submit
                             Perubahan</button>
                     </div>
                 </form>
@@ -153,7 +167,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
                         placeholder="Masukkan nomor telepon baru">
                     <div class="mt-6 text-right">
                         <button type="submit" name="submit_telp"
-                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit
+                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer">Submit
                             Perubahan</button>
                     </div>
                 </form>
@@ -169,7 +183,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
                         placeholder="Masukkan password yang baru anda masukan">
                     <div class="mt-6 text-right">
                         <button type="submit" name="submit_pass"
-                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit
+                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 cursor-pointer">Submit
                             Perubahan</button>
                     </div>
                 </form>
@@ -234,6 +248,6 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
 
 </html>
 
-<?php 
+<?php
 include './footer.php';
 ?>

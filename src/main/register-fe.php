@@ -13,7 +13,7 @@ include '../backend/register-be.php';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="../output.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
     <title>Register</title>
 </head>
 
@@ -30,19 +30,19 @@ include '../backend/register-be.php';
                 <?php
             if (isset($_GET['pesan'])) {
                 if ($_GET['pesan'] == "gagal") {
-                    echo "<h1>Register Gagal!</h1>";
+                    echo "<h1 class='text-red-500'>Register Gagal!</h1>";
                 } else if ($_GET['pesan'] == "password_error") {
-                    echo "<h1>Password dan Confirm Password tidak sama.</h1>";
+                    echo "<h1 class='text-red-500'>Password dan Confirm Password tidak sama.</h1>";
                 } else if ($_GET['pesan'] == "input_error") {
-                    echo "<h1>Mohon isi semua kolom.</h1>";
+                    echo "<h1 class='text-red-500'>Mohon isi semua kolom.</h1>";
                 } else if ($_GET['pesan'] == "register_berhasil") {
-                    echo "<h1>Register berhasil.</h1>";
+                    echo "<h1 class='text-red-500'>Register berhasil.</h1>";
                 } else if ($_GET['pesan'] == "nik-terpakai") {
-                    echo "<h1>NIK sudah terpakai.</h1>";
+                    echo "<h1 class='text-red-500'>NIK sudah terpakai.</h1>";
                 } else if ($_GET['pesan'] == "username-terpakai") {
-                    echo "<h1>Username sudah terpakai.</h1>";
+                    echo "<h1 class='text-red-500'>Username sudah terpakai.</h1>";
                 } else if ($_GET['pesan'] == "password_pendek") {
-                    echo "<h1>Password Minimal 8 karakter</h1>";
+                    echo "<h1 class='text-red-500'>Password Minimal 8 karakter</h1>";
                 }
                 
             }

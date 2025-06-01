@@ -15,9 +15,8 @@ $petugasMentah = mysqli_fetch_assoc($cariPetugas)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
-    <!-- <link href="../output.css" rel="stylesheet" /> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 
 </head>
 
@@ -196,7 +195,7 @@ $petugasMentah = mysqli_fetch_assoc($cariPetugas)
                         <div class="border-t px-4 py-3 text-center bg-white">
                             <a href="./anggota.php">
                                 <button
-                                    class="text-blue-500 font-semibold text-sm hover:underline flex items-center justify-center mx-auto">
+                                    class="text-blue-500 font-semibold text-sm hover:underline flex items-center justify-center mx-auto cursor-pointer">
                                     Lihat Lebih Banyak
                                     <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2"
                                         viewBox="0 0 24 24">

@@ -1,41 +1,24 @@
-<?php
-
-include './navbar.php';
-
-?>
+<?php include './navbar.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Profile</title>
-<script src="https://cdn.tailwindcss.com"></script>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile</title>
 </head>
 
-<body class="bg-white text-gray-800 font-sans">
-  <section class="text-center py-12">
-    <h2 class="text-2xl font-semibold text-red-900">About Us</h2>
-    <p class="text-gray-600 max-w-xl mx-auto mt-2">
-      <b> Selamat Datang di halaman website kami!</b>
-    <p class="text-gray-600 max-w-xl mx-auto mt-2">
-      <b>Sampaikan aspirasi dan pengaduan Anda melalui saluran resmi ini agar kami dapat terus meningkatkan
-        pelayanan.</b>
-    <p class="text-gray-600 max-w-xl mx-auto mt-2">
-      Website ini berisikan tentang informasi layanan pengaduan untuk masyarakat
-    <p class="text-gray-600 max-w-xl mx-auto mt-2">
-      <b>Tentang Kami<b>
-    </p>
-  </section>
+<body class="flex flex-col min-h-screen">
+  <main class="flex-grow">
+    <h2 class="text-2xl font-semibold text-center text-red-900 mb-10 mt-10">About Us</h2>
 
-  <body class="bg-gray-100 py-10">
     <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <!-- Card 1 -->
       <div class="bg-white rounded-lg shadow-md p-6 text-center">
         <h2 class="text-lg font-semibold">Nabhan Alzam</h2>
         <p class="text-sm text-gray-500 font-normal">Sebagai PM</p>
-        <p class="text-gray-600 mt-2 text-sm font-normal">Kepala Projek </p>
-        <p class="text-gray-600 mt-2 text-sm font-normal">Bekerja sebagai perencanaan, mengkoordinasi dengan tim,
-          berkomunikasi dengan stakeholder dan menjadi pengambil keputusan yang tepat.</p>
+        <p class="text-gray-600 mt-2 text-sm font-normal">Bekerja sebagai perencanaan, mengkoordinasi dengan tim.</p>
         <div class="flex justify-center gap-3 mt-4">
         </div>
       </div>
@@ -72,9 +55,11 @@ include './navbar.php';
 
     </div>
 
+  </main>
+  <?php
+  include './footer.php';
+  ?>
 
-  </body>
+</body>
 
-</html><?php
-include './footer.php';
-?>
+</html>

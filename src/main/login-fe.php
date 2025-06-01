@@ -26,11 +26,11 @@ include '../backend/login-be.php';
     <?php
     if (isset($_GET['pesan'])) {
       if ($_GET['pesan'] == "gagal") {
-        echo "<h1>Login Gagal! Password atau Username salah.</h1>";
+        echo "<h1 class='text-red-500'>Login Gagal! Password atau Username salah.</h1>";
       } else if ($_GET['pesan'] == "logout") {
-        echo "<h1>Logout berhasil.</h1>";
+        echo "<h1 class='text-red-500'>Logout berhasil.</h1>";
       } else if ($_GET['pesan'] == "belum_login") {
-        echo "<h1>Mohon login terlebih dahulu.</h1>";
+        echo "<h1 class='text-red-500'>Mohon login terlebih dahulu.</h1>";
       }
     }
     ?>

@@ -1,5 +1,5 @@
 <?php
-include '../connect.php'; // pastikan koneksi ada
+include '../connect.php'; 
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -24,7 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $row = mysqli_fetch_assoc($query);
         $id = $row['max_id'] ? $row['max_id'] + 1 : 1000;
 
-        $foto = upload(); // akan jadi default.jpg kalau kosong
+        $foto = upload(); 
+
+        if ($foto === 'invalid') {
+            header("location: masyarakat.php?pesan=ekstensi_error");
+            exit;
+        }
 
         $nik = is_array($_SESSION['nik']) ? $_SESSION['nik']['nik'] : $_SESSION['nik'];
 
@@ -46,22 +51,18 @@ function upload()
     $error = $_FILES['foto']['error'];
     $tmpName = $_FILES['foto']['tmp_name'];
 
-    // Jika tidak ada file yang diunggah
     if ($error === 4) {
         return 'default.jpg';
     }
 
-    // Validasi ekstensi file
     $ekstensiGambar = explode('.', $namaFile);
     $ekstensiGambar = strtolower(end($ekstensiGambar));
     $ekstensiValid = ['jpg', 'jpeg', 'png', 'gif'];
 
     if (!in_array($ekstensiGambar, $ekstensiValid)) {
-        return 'default.jpg';
+        return 'invalid';
     }
 
-
-    // Generate nama file baru dan pindahkan file
     $namaFileBaru = uniqid() . '.' . $ekstensiGambar;
     move_uploaded_file($tmpName, '../assets/img/' . $namaFileBaru);
 

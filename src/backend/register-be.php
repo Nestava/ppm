@@ -26,25 +26,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mysqli_num_rows($validasinik) > 0) {
         header("location:register-fe.php?pesan=nik-terpakai");
         exit;
-    }
+    } else
 
     if ($password != $con_password) {
         header("location:register-fe.php?pesan=password_error");
         exit;
-    }
+    } else
 
-    if (strlen($password) < 8) {
+    if (strlen($_POST['password']) < 8) {
         header("location:register-fe.php?pesan=password_pendek");
         exit;
     }
 
     mysqli_query($conn, "INSERT INTO masyarakat (nik, nama, username, password, telp) VALUES ('$nik', '$name', '$username', '$password', '$telepon');");
 
-    header("location:register-fe.php?pesan=register_berhasil");
-
     session_start();
 
-    $_SESSION['nik'] = $nik;
+    $_SESSION['nik'] = $nik; 
     $_SESSION['status'] = "login";
     header("location:../main/masyarakat.php");
 

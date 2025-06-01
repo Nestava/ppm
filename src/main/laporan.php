@@ -45,7 +45,7 @@ if (isset($_GET['kategori'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <title>Laporan</title>
 </head>
 
@@ -63,12 +63,12 @@ if (isset($_GET['kategori'])) {
     <div class="flex justify-center items-center space-x-1 my-6">
         <?php if ($total_data > 0 && $total_pages > 1): ?>
             <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= max(1, $page - 1) ?>"
-                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? '/50 cursor-not-allowed' : '' ?>">
                 &lt;
             </a>
 
             <?php
-            $range = 2; // jumlah halaman sebelum dan sesudah halaman aktif
+            $range = 2; 
             $start = max(1, $page - $range);
             $end = min($total_pages, $page + $range);
 
@@ -94,7 +94,7 @@ if (isset($_GET['kategori'])) {
             ?>
 
             <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
-                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? '/50 cursor-not-allowed' : '' ?>">
                 &gt;
             </a>
         <?php elseif ($total_data < 1): ?>
@@ -150,23 +150,42 @@ if (isset($_GET['kategori'])) {
     </div>
 
     <div class="flex justify-center items-center space-x-1 my-6">
-        <?php if ($total_data > 0): ?>
-            <?php if ($total_pages > 1): ?>
-                <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= max(1, $page - 1) ?>"
-                    class="px-2 py-1 border rounded hover:bg-gray-200">&lt;</a>
+        <?php if ($total_data > 0 && $total_pages > 1): ?>
+            <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= max(1, $page - 1) ?>"
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? '/50 cursor-not-allowed' : '' ?>">
+                &lt;
+            </a>
 
-                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-                    <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= $i ?>"
-                        class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800' ?>">
-                        <?= $i ?>
-                    </a>
-                <?php endfor; ?>
+            <?php
+            $range = 2; 
+            $start = max(1, $page - $range);
+            $end = min($total_pages, $page + $range);
 
-                <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
-                    class="px-2 py-1 border rounded hover:bg-gray-200">&gt;</a>
-            <?php endif; ?>
-        <?php endif; ?>
-        <?php if ($total_data < 1): ?>
+            if ($start > 1) {
+                echo '<a href="?' . (isset($kategori) ? "kategori=$kategori&" : "") . 'page=1" class="px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">1</a>';
+                if ($start > 2)
+                    echo '<span class="px-2 text-gray-500">...</span>';
+            }
+
+            for ($i = $start; $i <= $end; $i++):
+                ?>
+                <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= $i ?>"
+                    class="px-3 py-1 rounded <?= $i == $page ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-800 hover:bg-gray-300' ?>">
+                    <?= $i ?>
+                </a>
+            <?php endfor;
+
+            if ($end < $total_pages) {
+                if ($end < $total_pages - 1)
+                    echo '<span class="px-2 text-gray-500">...</span>';
+                echo '<a href="?' . (isset($kategori) ? "kategori=$kategori&" : "") . 'page=' . $total_pages . '" class="px-3 py-1 rounded bg-gray-200 text-gray-800 hover:bg-gray-300">' . $total_pages . '</a>';
+            }
+            ?>
+
+            <a href="?<?= isset($kategori) ? "kategori=$kategori&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? '/50 cursor-not-allowed' : '' ?>">
+                &gt;
+            </a>
         <?php endif; ?>
     </div>
 

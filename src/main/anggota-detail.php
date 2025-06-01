@@ -34,7 +34,7 @@ if ($petugasMentah['level'] == 'admin') {
 ?>
 
 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST') :?>
-    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div class="bg-white px-5 py-5 rounded-xl">
             <h1 class="">Apakah anda yakin ingin menghapus akun ini?</h1>
             <div class="flex justify-end gap-2 mt-5">
@@ -73,7 +73,7 @@ $cariTanggapan = mysqli_query($conn, "SELECT * FROM tanggapan WHERE id_petugas='
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anggota PPM</title>
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
 </head>
 
 <body>

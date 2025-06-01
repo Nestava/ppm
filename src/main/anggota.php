@@ -43,7 +43,7 @@ if (isset($_GET['level'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <title>Laporan</title>
 </head>
 
@@ -67,7 +67,7 @@ if (isset($_GET['level'])) {
     <div class="flex justify-center items-center space-x-1 my-6">
         <?php if ($total_data > 0 && $total_pages > 1): ?>
             <a href="?<?= isset($level) ? "level=$level&" : "" ?>page=<?= max(1, $page - 1) ?>"
-                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? '/50 cursor-not-allowed' : '' ?>">
                 &lt;
             </a>
 
@@ -98,11 +98,11 @@ if (isset($_GET['level'])) {
             ?>
 
             <a href="?<?= isset($level) ? "level=$level&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
-                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? '/50 cursor-not-allowed' : '' ?>">
                 &gt;
             </a>
         <?php elseif ($total_data < 1): ?>
-            <h1 class="text-gray-500">Belum ada petugas yang bisa diperiksa.</h1>
+            <h1 class="text-gray-500">Belum ada anggota yang bisa diperiksa.</h1>
         <?php endif; ?>
     </div>
 
@@ -141,7 +141,7 @@ if (isset($_GET['level'])) {
     <div class="flex justify-center items-center space-x-1 my-6">
         <?php if ($total_data > 0 && $total_pages > 1): ?>
             <a href="?<?= isset($level) ? "level=$level&" : "" ?>page=<?= max(1, $page - 1) ?>"
-                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == 1 ? '/50 cursor-not-allowed' : '' ?>">
                 &lt;
             </a>
 
@@ -172,11 +172,9 @@ if (isset($_GET['level'])) {
             ?>
 
             <a href="?<?= isset($level) ? "level=$level&" : "" ?>page=<?= min($total_pages, $page + 1) ?>"
-                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? 'opacity-50 cursor-not-allowed' : '' ?>">
+                class="px-3 py-1 border rounded hover:bg-gray-200 <?= $page == $total_pages ? '/50 cursor-not-allowed' : '' ?>">
                 &gt;
             </a>
-        <?php elseif ($total_data < 1): ?>
-            <h1 class="text-gray-500">Belum ada petugas yang bisa diperiksa.</h1>
         <?php endif; ?>
     </div>
 
