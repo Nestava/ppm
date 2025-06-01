@@ -15,6 +15,17 @@ include '../backend/register-be.php';
     <link href="../output.css" rel="stylesheet" />
     <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
     <title>Register</title>
+    <style>
+        input.no-spinner::-webkit-inner-spin-button,
+        input.no-spinner::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input.no-spinner {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 
 <body class="bg-linear-to-r from-[#FF4545] to-[#600000] h-screen flex items-center justify-center">
@@ -53,8 +64,8 @@ include '../backend/register-be.php';
                 <div class="mb-5 border-t-2 border-[#870000]">
                     <div class="mb-1 mt-5">
                         <label for="nik">NIK</label><br />
-                        <input id="nik" name="nik"
-                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                        <input id="nik" name="nik" type="number"
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1 no-spinner"
                             placeholder="Masukkan NIK" />
                     </div>
                     <div class="mb-1">
@@ -71,8 +82,8 @@ include '../backend/register-be.php';
                     </div>
                     <div class="mb-1">
                         <label for="telepon">Telepon</label><br />
-                        <input id="telepon" name="telepon"
-                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1"
+                        <input id="telepon" name="telepon" type="number"
+                            class="w-sm bg-gray-100 border-1 border-slate-300 rounded-lg px-1.5 py-1 no-spinner"
                             placeholder="Masukkan No. Telepon" />
                     </div>
                     <div class="mb-1">

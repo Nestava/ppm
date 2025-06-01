@@ -10,12 +10,17 @@
 </head>
 
 <body class="">
-    <footer class="w-full bottom-0 bg-red-700 text-white mt-28 py-6 justify-center items-center text-center text-sm flex gap-8 static">
-        <?php if (isset($_SESSION['nik'])) :?>
-        <a href="laporan.php">Lapor</a>
+    <footer
+        class="w-full bottom-0 bg-red-700 text-white mt-28 py-6 justify-center items-center text-center text-sm flex gap-8 static">
+        <?php if (isset($_SESSION['nik'])): ?>
+            <a href="masyarakat.php">Lapor</a>
+            <p class="font-bold text-xl">PPM</p>
+            <a href="aboutaspage.php">About Us</a>
+        <?php else: ?>
+            <a href="petugas.php">Petugas</a>
+            <a href="laporan.php">Laporan</a>
+            <a href="anggota.php">Anggota</a>
         <?php endif; ?>
-        <p class="font-bold text-xl">PPM</p>
-        <a href="aboutaspage.php">About Us</a>
     </footer>
 </body>
 

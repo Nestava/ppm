@@ -55,7 +55,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Register Admin</title>
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <style>
+        input.no-spinner::-webkit-inner-spin-button,
+        input.no-spinner::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
 
+        input.no-spinner {
+            -moz-appearance: textfield;
+        }
+    </style>
 </head>
 
 <body class="flex flex-col min-h-screen">
@@ -94,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="mb-4">
                     <label class="mb-1">Telepon</label>
-                    <input type="text" name="telp"
-                        class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-200" />
+                    <input type="number" name="telp"
+                        class="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:ring-blue-200 no-spinner" />
                 </div>
 
                 <div class="mb-4">

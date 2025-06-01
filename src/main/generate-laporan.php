@@ -80,13 +80,9 @@ $html = '
     <img style="width: 300px;" src="' . $base64 . '">
 </div>';
 
-$dompdf = new Dompdf();
 $dompdf->loadHtml($html);
-
 $dompdf->setPaper('A4', 'portrait');
-
 $dompdf->render();
-
 $dompdf->stream("laporan_pengaduan_" . $id . ".pdf", array("Attachment" => false));
 
 exit;
